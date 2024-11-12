@@ -1,9 +1,8 @@
-import Pact from 'pact-lang-api'
-import { genKeyPair} from '@kadena/cryptography-utils';
-
-
+import { genKeyPair, restoreKeyPairFromSecretKey, verifySig, sign} from '@kadena/cryptography-utils';
 
 export class SigningManager {
+  publicKey:string
+  secretKey:string
   constructor(secretKey = null) {
     if (secretKey) {
       this.setSecretKey(secretKey);
@@ -15,13 +14,13 @@ export class SigningManager {
    return keyPair
   }
 
-  setSecretKey(sk) {
-    const keyPair = Pact.crypto.restoreKeyPairFromSecretKey(sk)
+  setSecretKey(sk:string) {
+    const keyPair = restoreKeyPairFromSecretKey(sk)
     this.publicKey = keyPair.publicKey;
     this.secretKey = keyPair.secretKey
   }
 
-  signData(data) {
+  signData(data:any) {
     if (!this.secretKey) {
       throw new Error('Secret key not set. Please call setSecretKey() first.');
     }
@@ -32,17 +31,17 @@ export class SigningManager {
         return obj;
     }, {});
     const msg = JSON.stringify(sortedJsondata);
-    const signedMessage = Pact.crypto.sign(msg, {publicKey:this.publicKey, secretKey:this.secretKey})
+    const signedMessage = sign(msg, {publicKey:this.publicKey, secretKey:this.secretKey})
     return signedMessage.sig
   }
 
-  verifySignature(data, signature, publicKey) {
+  /*verifySignature(data:any, signature:string, publicKey:string) {
     const sortedJsondata = Object.keys(data)
     .sort() // Sort the keys
     .reduce((obj, key) => {
         obj[key] = data[key]; // Build a new sorted object
         return obj;
     }, {});
-    const verify = Pact.crypto.verifySignature(JSON.stringify(sortedJsondata), signature, publicKey);
-  }
+    const verify = verifySig(JSON.stringify(sortedJsondata), signature, publicKey);
+  }*/
 }

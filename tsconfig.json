@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+      "outDir": "./dist",
+      "allowJs": true,
+      "target": "es5",
+      "baseUrl": ".",
+      "paths": {
+        "socket.io-client": ["node_modules/socket.io-client"]
+      }
+    },
+    "include": ["./src/**/*"]
+  }

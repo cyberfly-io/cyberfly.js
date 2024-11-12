@@ -3,10 +3,13 @@ import { io } from "socket.io-client";
 import { SigningManager } from './signing.js';
 import { QUERIES } from './queries.js';
 import { MUTATIONS } from './mutations.js';
-import { ObjectType, AggregationType, SortOrder } from './constants.js';
 
-class CyberflySDK {
-  constructor(endpoint, secretKey = null) {
+export class CyberflySDK {
+  graphql_endpoint:string
+  client:any
+  signing:any
+  socket:any
+  constructor(endpoint:string, secretKey:string = null) {
     this.graphql_endpoint = endpoint+'/graphql'
     this.client = new GraphQLClient(this.graphql_endpoint)
     this.signing = new SigningManager(secretKey);
@@ -21,15 +24,15 @@ class CyberflySDK {
     return this.signing.generateKeyPair();
   }
 
-   subscribe(topic) {
+   subscribe(topic:string) {
     return this.socket.emit("subscribe", topic);
   }
   
-   publish(topic, msg) {
+   publish(topic:string, msg:any) {
     return this.socket.emit("publish", {topic:topic, message:msg});
   }
 
-  onReceive(callBack) {
+  onReceive(callBack:any) {
     this.socket.on('onmessage', (data) => {
       const {topic, message} = data
       try {
@@ -40,7 +43,7 @@ class CyberflySDK {
     });
   }
 
-  setSecretKey(secretKey) {
+  setSecretKey(secretKey:string) {
     this.signing.setSecretKey(secretKey);
   }
 
@@ -57,7 +60,7 @@ class CyberflySDK {
   }
 
   // Database Operations
-  async createDatabase(dbinfo) {
+  async createDatabase(dbinfo:any) {
     const signature = this.signing.signData(dbinfo)
     
     const data = await this.client.request(MUTATIONS.CREATE_DATABASE, {input:{
@@ -86,24 +89,31 @@ class CyberflySDK {
 
   async updateTS({ dbaddr, data: inputData, _id = null }){
     const objectType = "ts"
-    const res = updateData({dbaddr, inputData, objectType,_id})
+    const res = this.updateData({dbaddr, data:inputData, objectType,_id})
+    return res
+
   }
 
   async updateGEO({ dbaddr, data: inputData, _id = null }){
     const objectType = "geo"
-    const res = updateData({dbaddr, inputData, objectType,_id})
+    const res = this.updateData({dbaddr, data:inputData, objectType,_id})
+    return res
+
   }
 
   async updateStream({ dbaddr, data: inputData, _id = null }){
     const objectType = "stream"
-    const res = updateData({dbaddr, inputData, objectType,_id})
+    const res = this.updateData({dbaddr, data:inputData, objectType,_id})
+    return res
+
   }
   async updateJSON({ dbaddr, data: inputData, _id = null }){
     const objectType = "json"
-    const res = updateData({dbaddr, inputData, objectType,_id})
+    const res = this.updateData({dbaddr, data:inputData, objectType,_id})
+    return res
   }
 
-  async readDB(dbaddr, filters = {}, options = {}) {
+  async readDB(dbaddr:string, filters = {}, options = {}) {
     const data = await this.client.request(QUERIES.READ_DB, {
       dbaddr,
       filters,
@@ -113,9 +123,3 @@ class CyberflySDK {
   }
   // Additional methods...
 }
-
-// Export constants
-export { ObjectType, AggregationType, SortOrder };
-
-// Export main SDK
-export default CyberflySDK;

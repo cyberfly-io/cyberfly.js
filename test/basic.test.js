@@ -1,5 +1,4 @@
-import CyberflySDK from "../src/lib/index.js";
-
+import { CyberflySDK } from "../dist/index.js";
 async function example() {
     try {
       // Initialize the SDK
