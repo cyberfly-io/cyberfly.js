@@ -1,4 +1,4 @@
-import { genKeyPair, restoreKeyPairFromSecretKey, verifySig, sign} from '@kadena/cryptography-utils';
+import { genKeyPair, restoreKeyPairFromSecretKey, verifySig, sign, hashBin, hexToBin} from '@kadena/cryptography-utils';
 
 export class SigningManager {
   publicKey:string
@@ -35,13 +35,15 @@ export class SigningManager {
     return signedMessage.sig
   }
 
-  /*verifySignature(data:any, signature:string, publicKey:string) {
+  verifySignature(data:any, signature:string, publicKey:string) {
     const sortedJsondata = Object.keys(data)
     .sort() // Sort the keys
     .reduce((obj, key) => {
         obj[key] = data[key]; // Build a new sorted object
         return obj;
     }, {});
-    const verify = verifySig(JSON.stringify(sortedJsondata), signature, publicKey);
-  }*/
+    const jsonstr = JSON.stringify(sortedJsondata)
+    const verify = verifySig(hashBin(jsonstr), hexToBin(signature), hexToBin(publicKey));
+    return verify
+  }
 }

@@ -12,46 +12,44 @@ async function example() {
       sdk.setSecretKey(keyPair.secretKey);
   
       // Create a new database
-      /*const dbCreation = await sdk.createDatabase({
+      const dbCreation = await sdk.createDatabase({
         name: 'test-db'
       });
       console.log('Database Creation:', dbCreation);
   
       if (dbCreation.dbaddr) {
         // Update JSON data
-        const jsonUpdate = await sdk.updateData({
+        const jsonUpdate = await sdk.updateJSON({
           dbaddr: dbCreation.dbaddr,
           data: { 
-            key: 'value',
+            hello: "world",
             timestamp: Date.now()
           },
-          objectType: 'json'
         });
         console.log('JSON Update:', jsonUpdate);
   
         // Update stream data
-        const streamUpdate = await sdk.updateData({
+        const streamUpdate = await sdk.updateStream({
           dbaddr: dbCreation.dbaddr,
           data: { 
             streamName: 'myStream',
             message: 'Hello World',
             timestamp: Date.now()
-          },
-          objectType: 'stream'
+          }
         });
         console.log('Stream Update:', streamUpdate);
   
         // Update time series data
-        const tsUpdate = await sdk.updateData({
+        const tsUpdate = await sdk.updateTS({
           dbaddr: dbCreation.dbaddr,
           data: { 
             value: 42.5,
+            timestamp: Date.now(),
             labels: {
               sensor: 'temperature',
               location: 'room1'
             }
           },
-          objectType: 'ts'
         });
         console.log('Time Series Update:', tsUpdate);
   
@@ -69,13 +67,13 @@ async function example() {
   
         // Read back the data
         
-      }*/
+      }
      sdk.subscribe("test")
      sdk.onReceive((msg, topic)=>{
       console.log(topic)
       console.log(msg)
      })
-        const dbData = await sdk.readDB("/orbitdb/zdpuAzU5gpTmtSPUpHYZjHLQsWoWgaXLW388p6XssNubbBa2u");
+        const dbData = await sdk.readDB(dbCreation.dbaddr);
         console.log(dbData)
     } catch (error) {
       console.error('Error:', error);
