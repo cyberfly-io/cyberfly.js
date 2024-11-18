@@ -10,7 +10,7 @@ export class CyberflySDK {
   signing:any
   socket:any
   constructor(endpoint:string, secretKey:string = null) {
-    this.graphql_endpoint = endpoint+'/graphql'
+    this.graphql_endpoint = endpoint.replace(/\/$/, "")+'/graphql'
     this.client = new GraphQLClient(this.graphql_endpoint)
     this.signing = new SigningManager(secretKey);
     this.socket = io(endpoint);
@@ -30,6 +30,10 @@ export class CyberflySDK {
   
    publish(topic:string, msg:any) {
     return this.socket.emit("publish", {topic:topic, message:msg});
+  }
+
+  pinDb(dbaddr:string){
+    return this.socket.emit("publish", {topic:"dbupdate", message:JSON.stringify({dbaddr})})
   }
 
   onReceive(callBack:any) {
@@ -84,6 +88,7 @@ export class CyberflySDK {
         publicKey: this.signing.publicKey,
         _id
     }})
+    this.pinDb(dbaddr)
     return data.updateData
   }
 
