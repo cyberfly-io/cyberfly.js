@@ -33,7 +33,7 @@ export class CyberflySDK {
   }
 
   pinDb(dbaddr:string){
-    return this.socket.emit("publish", {topic:"dbupdate", message:JSON.stringify({dbaddr})})
+    return this.socket.emit("publish", {topic:"pindb", message:JSON.stringify({dbaddr})})
   }
 
   onReceive(callBack:any) {
