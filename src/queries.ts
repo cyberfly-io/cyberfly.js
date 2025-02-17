@@ -53,8 +53,8 @@ export const QUERIES = {
   `,
 
   READ_DB: gql`
-    query ReadDB($dbaddr: String!, $filters: JSON, $options: FilterOptionsInput) {
-      readDB(dbaddr: $dbaddr, filters: $filters, options: $options) {
+    query ReadJSONDB($dbaddr: String!, $filters: JSON, $options: FilterOptionsInput) {
+      readJSONDB(dbaddr: $dbaddr, filters: $filters, options: $options) {
         _id
         sig
         data

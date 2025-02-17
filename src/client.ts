@@ -124,7 +124,7 @@ export class CyberflySDK {
       filters,
       options
     })
-    return data.readDB
+    return data.readJSONDB
   }
   // Additional methods...
 }

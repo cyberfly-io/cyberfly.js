@@ -702,11 +702,12 @@
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
 
-"@cyberfly-io/client@file:":
-  version "1.0.3"
-  resolved "file:"
+"@cyberfly-io/client@^1.1.1", "@cyberfly-io/client@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/@cyberfly-io/client/-/client-1.1.2.tgz"
+  integrity sha512-8F9wSLKzI/jhAxzQ+VUn58dwOMPjx2/oIfrabaHJltk0SMAir8BtxkIYO22TZKkZ7bVktrHzW3sRr6TG/+so1Q==
   dependencies:
-    "@cyberfly-io/client" "file:"
+    "@cyberfly-io/client" "^1.1.1"
     "@kadena/cryptography-utils" "^0.4.4"
     "@kadena/types" "^0.7.0"
     graphql "^16.9.0"
