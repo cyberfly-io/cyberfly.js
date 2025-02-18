@@ -13,9 +13,28 @@ export class CyberflySDK {
     this.graphql_endpoint = endpoint.replace(/\/$/, "")+'/graphql'
     this.client = new GraphQLClient(this.graphql_endpoint)
     this.signing = new SigningManager(secretKey);
-    this.socket = io(endpoint);
+    this.socket = io(endpoint, {
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      randomizationFactor: 0.5
+    });
+
     this.socket.on('connect', () => {
       console.log(`Connected to ${endpoint}`);
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log(`Disconnected from ${endpoint}. Attempting to reconnect...`);
+    });
+
+    this.socket.on('reconnect', (attemptNumber) => {
+      console.log(`Reconnected to ${endpoint} after ${attemptNumber} attempts`);
+    });
+
+    this.socket.on('reconnect_failed', () => {
+      console.log(`Failed to reconnect to ${endpoint}`);
     });
   }
 
@@ -24,16 +43,22 @@ export class CyberflySDK {
     return this.signing.generateKeyPair();
   }
 
-   subscribe(topic:string) {
+  subscribe(topic:string) {
     return this.socket.emit("subscribe", topic);
   }
   
-   publish(topic:string, msg:any) {
+  publish(topic:string, msg:any) {
     return this.socket.emit("publish", {topic:topic, message:msg});
   }
 
   pinDb(dbaddr:string){
     return this.socket.emit("publish", {topic:"pindb", message:JSON.stringify({dbaddr})})
+  }
+
+  onConnect(callBack:any){
+    this.socket.on('connect', ()=>{
+      callBack()
+    })
   }
 
   onReceive(callBack:any) {

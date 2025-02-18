@@ -68,7 +68,9 @@ async function example() {
         // Read back the data
         
       }
-     sdk.subscribe("test")
+     sdk.onConnect(()=>{
+      sdk.subscribe("test")
+     })
      sdk.onReceive((msg, topic)=>{
       console.log(topic)
       console.log(msg)
