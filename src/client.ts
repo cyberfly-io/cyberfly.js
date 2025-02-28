@@ -151,5 +151,94 @@ export class CyberflySDK {
     })
     return data.readJSONDB
   }
-  // Additional methods...
+
+  async getDistance(dbaddr: string, locationLabel: string, member1: string, member2: string, unit: string) {
+    const data = await this.client.request(QUERIES.GET_DISTANCE, {
+      dbaddr,
+      locationLabel,
+      member1,
+      member2,
+      unit
+    });
+    return data.getDistance;
+  }
+
+  async getPosition(dbaddr: string, locationLabel: string, member: string) {
+    const data = await this.client.request(QUERIES.GET_POSITION, {
+      dbaddr,
+      locationLabel,
+      member
+    });
+    return data.getPosition;
+  }
+
+  async getGeoHash(dbaddr: string, locationLabel: string, member: string) {
+    const data = await this.client.request(QUERIES.GET_GEO_HASH, {
+      dbaddr,
+      locationLabel,
+      member
+    });
+    return data.getGeoHash;
+  }
+
+  async geoSearch(dbaddr: string, locationLabel: string, longitude: number, latitude: number, radius: number, unit: string) {
+    const data = await this.client.request(QUERIES.GEO_SEARCH, {
+      dbaddr,
+      locationLabel,
+      longitude,
+      latitude,
+      radius,
+      unit
+    });
+    return data.geoSearch;
+  }
+
+  async geoSearchWith(dbaddr: string, locationLabel: string, member: string, radius: number, unit: string) {
+    const data = await this.client.request(QUERIES.GEO_SEARCH_WITH, {
+      dbaddr,
+      locationLabel,
+      member,
+      radius,
+      unit
+    });
+    return data.geoSearchWith;
+  }
+
+  async readStream(dbaddr: string, streamName: string, from?: string, to?: string) {
+    const data = await this.client.request(QUERIES.READ_STREAM, {
+      dbaddr,
+      streamName,
+      from,
+      to
+    });
+    return data.readStream;
+  }
+
+  async readTimeSeries(
+    dbaddr: string, 
+    fromTimestamp?: string,
+    toTimestamp?: string,
+    options?: any
+  ) {
+    const data = await this.client.request(QUERIES.READ_TIME_SERIES, {
+      dbaddr,
+      fromTimestamp,
+      toTimestamp,
+      options
+    });
+    return data.readTimeSeries;
+  }
+
+  async readSortedSet(
+    dbaddr: string, 
+    min?: string | number,
+    max?: string | number
+  ) {
+    const data = await this.client.request(QUERIES.READ_SORTED_SET, {
+      dbaddr,
+      min,
+      max
+    });
+    return data.readSortedSet;
+  }
 }

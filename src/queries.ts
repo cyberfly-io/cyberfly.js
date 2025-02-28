@@ -89,5 +89,91 @@ export const QUERIES = {
         value
       }
     }
+  `,
+
+  GET_DISTANCE: gql`
+    query GetDistance($dbaddr: String!, $locationLabel: String!, $member1: String!, $member2: String!, $unit: String!) {
+      getDistance(
+        dbaddr: $dbaddr
+        locationLabel: $locationLabel
+        member1: $member1
+        member2: $member2
+        unit: $unit
+      )
+    }
+  `,
+
+  GET_POSITION: gql`
+    query GetPosition($dbaddr: String!, $locationLabel: String!, $member: String!) {
+      getPosition(
+        dbaddr: $dbaddr
+        locationLabel: $locationLabel
+        member: $member
+      ) {
+        longitude
+        latitude
+      }
+    }
+  `,
+
+  GET_GEO_HASH: gql`
+    query GetGeoHash($dbaddr: String!, $locationLabel: String!, $member: String!) {
+      getGeoHash(
+        dbaddr: $dbaddr
+        locationLabel: $locationLabel
+        member: $member
+      )
+    }
+  `,
+
+  GEO_SEARCH: gql`
+    query GeoSearch(
+      $dbaddr: String!
+      $locationLabel: String!
+      $longitude: Float!
+      $latitude: Float!
+      $radius: Float!
+      $unit: String!
+    ) {
+      geoSearch(
+        dbaddr: $dbaddr
+        locationLabel: $locationLabel
+        longitude: $longitude
+        latitude: $latitude
+        radius: $radius
+        unit: $unit
+      ) {
+        member
+      }
+    }
+  `,
+
+  GEO_SEARCH_WITH: gql`
+    query GeoSearchWith(
+      $dbaddr: String!
+      $locationLabel: String!
+      $member: String!
+      $radius: Float!
+      $unit: String!
+    ) {
+      geoSearchWith(
+        dbaddr: $dbaddr
+        locationLabel: $locationLabel
+        member: $member
+        radius: $radius
+        unit: $unit
+      ) {
+        member
+      }
+    }
+  `,
+
+  READ_SORTED_SET: gql`
+    query ReadSortedSet($dbaddr: String!, $min: Timestamp, $max: Timestamp) {
+      readSortedSet(dbaddr: $dbaddr, min: $min, max: $max) {
+        timestamp
+        message
+      }
+    }
   `
 };
