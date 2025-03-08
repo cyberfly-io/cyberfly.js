@@ -9,3 +9,9 @@ export const generateX25519KeyPair = ()=> {
     };
   }
 
+
+  export const getStreamName = (senderKey: string, receiverKey: string)=>{
+    const sortedKeys = [senderKey, receiverKey].sort();
+    const concatenatedKeys = sortedKeys.join('');
+    return concatenatedKeys
+  }

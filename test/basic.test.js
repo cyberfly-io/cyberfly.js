@@ -54,14 +54,14 @@ async function example() {
         console.log('Time Series Update:', tsUpdate);
   
         // Update geo data
-        const geoUpdate = await sdk.updateData({
+        const geoUpdate = await sdk.updateGEO({
           dbaddr: dbCreation.dbaddr,
           data: { 
+            locationLabel:"Cities",
             latitude: 37.7749,
             longitude: -122.4194,
             member: 'san-francisco'
           },
-          objectType: 'geo'
         });
         console.log('Geo Update:', geoUpdate);
   

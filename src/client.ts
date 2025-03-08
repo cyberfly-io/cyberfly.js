@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { SigningManager } from './signing.js';
 import { QUERIES } from './queries.js';
 import { MUTATIONS } from './mutations.js';
+import { getStreamName } from './utils.js';
 
 export class CyberflySDK {
   graphql_endpoint:string
@@ -53,6 +54,18 @@ export class CyberflySDK {
 
   pinDb(dbaddr:string){
     return this.socket.emit("publish", {topic:"pindb", message:JSON.stringify({dbaddr})})
+  }
+
+  sendMessage(receiver:string, msg:object) {
+    if (!this.signing.secretKey) {
+      throw new Error('Secret key not set. Please call setSecretKey() first.');
+    }
+    const senderKey = this.signing.publicKey;
+    const streamName = getStreamName(senderKey, receiver);
+    const data = {...msg, streamName};
+    const signature = this.signing.signData(data);
+    const message = {data, sig:signature, publicKey: this.signing.publicKey};
+    return this.socket.emit("send message", {receiver:receiver,stream:streamName,message:JSON.stringify(message)});
   }
 
   onConnect(callBack:any){
