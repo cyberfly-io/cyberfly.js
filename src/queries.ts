@@ -175,5 +175,14 @@ export const QUERIES = {
         message
       }
     }
+  `,
+
+  READ_CHAT_HISTORY: gql`
+    query ReadChatHistory($streamName: String!, $from: String, $to: String) {
+      readChatHistory(streamName: $streamName, from: $from, to: $to) {
+        message
+        id
+      }
+    }
   `
 };

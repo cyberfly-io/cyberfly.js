@@ -702,11 +702,10 @@
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
 
-"@cyberfly-io/client@file:":
-  version "1.1.5"
-  resolved "file:"
+"@cyberfly-io/client@file:../../../../opt/homebrew/Cellar/node/23.9.0/lib/node_modules/@cyberfly-io/client":
+  version "1.1.8"
+  resolved "file:../../../../opt/homebrew/Cellar/node/23.9.0/lib/node_modules/@cyberfly-io/client"
   dependencies:
-    "@cyberfly-io/client" "file:"
     "@kadena/cryptography-utils" "^0.4.4"
     "@kadena/types" "^0.7.0"
     graphql "^16.9.0"

@@ -1,4 +1,4 @@
-import { encrypt, decrypt, generateX25519KeyPair } from "@cyberfly-io/client";
+import { encrypt, decrypt, generateX25519KeyPair, getX25519KeyPair } from "@cyberfly-io/client";
 
 
 const sender_keyPair = generateX25519KeyPair()

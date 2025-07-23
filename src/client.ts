@@ -254,4 +254,13 @@ export class CyberflySDK {
     });
     return data.readSortedSet;
   }
+
+  async getChatHistory(streamName: string, from?: string, to?: string) {
+    const data = await this.client.request(QUERIES.READ_CHAT_HISTORY, {
+      streamName,
+      from,
+      to
+    });
+    return data.readChatHistory;
+  }
 }
