@@ -702,6 +702,24 @@
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
 
+"@cyberfly-io/client@file:":
+  version "1.2.0"
+  resolved "file:"
+  dependencies:
+    "@cyberfly-io/client" "file:"
+    "@kadena/cryptography-utils" "^0.4.4"
+    "@kadena/types" "^0.7.0"
+    bip39 "^3.1.0"
+    ed25519-hd-key "^1.3.0"
+    graphql "^16.9.0"
+    graphql-request "^7.1.2"
+    pact-lang-api "^4.3.6"
+    socket.io-client "^4.8.1"
+    source-map-loader "^5.0.0"
+    ts-loader "^9.5.1"
+    tweetnacl "^1.0.3"
+    tweetnacl-util "^0.15.1"
+
 "@esbuild/darwin-arm64@0.24.0":
   version "0.24.0"
   resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.24.0.tgz"

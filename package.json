@@ -1,6 +1,6 @@
 {
     "name": "@cyberfly-io/client",
-    "version": "1.1.9",
+    "version": "1.2.0",
     "description": "Official SDK for Cyberfly GraphQL API and pubsub",
     "type": "module",
     "main": "./dist/index.js",

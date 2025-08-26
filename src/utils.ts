@@ -35,23 +35,12 @@ export const generateX25519FromMnemonic = (mnemonic: string, path: string = "m/4
     throw new Error('Mnemonic must be 12 words');
   }
   const seed = mnemonicToSeedSync(mnemonic); // Buffer
-  const { key /* 32-byte seed */, chainCode } = derivePath(path, seed.toString('hex'));
+  const { key  } = derivePath(path, seed.toString('hex'));
   const edSeed = Uint8Array.from(key);
-  const edKeyPair = nacl.sign.keyPair.fromSeed(edSeed);
   const x25519 = nacl.box.keyPair.fromSecretKey(edSeed);
-
   return {
-    path,
-    chainCode: binToHex(chainCode),
-    ed25519: {
-      seed: binToHex(edSeed),
-      publicKey: binToHex(edKeyPair.publicKey),
-      secretKey: binToHex(edKeyPair.secretKey) // 64 bytes (seed + pub)
-    },
-    x25519: {
       publicKey: binToHex(x25519.publicKey),
-      secretKey: binToHex(x25519.secretKey)
-    }
+      privateKey: binToHex(x25519.secretKey)
   };
 }
 

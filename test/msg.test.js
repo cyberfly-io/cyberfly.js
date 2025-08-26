@@ -2,7 +2,7 @@ import { CyberflySDK, getStreamName } from "@cyberfly-io/client";
 
 async function example() {
     try {
-      const sdk = new CyberflySDK('https://node.cyberfly.io');
+      const sdk = new CyberflySDK('http://localhost:31003');
   
       sdk.setSecretKey("0476b401cdf8f80279edd2b61ccd3708bfbc6196ba5e6ce321867c84f5d5a216");
       const sender_pubkey = sdk.signing.publicKey
