@@ -1,5 +1,7 @@
 import { binToHex, hexToBin } from '@kadena/cryptography-utils';
 import nacl from 'tweetnacl';
+import { mnemonicToSeedSync, validateMnemonic } from 'bip39';
+import { derivePath } from 'ed25519-hd-key';
 
 export const generateX25519KeyPair = ()=> {
     const keyPair = nacl.box.keyPair();
@@ -10,26 +12,51 @@ export const generateX25519KeyPair = ()=> {
   }
 
 
+
+
 export const getX25519KeyPair = (privateKey: string) => {
-const kp = nacl.sign.keyPair.fromSeed(hexToBin(privateKey));
-const ed25519PublicKey = kp.publicKey; // 32 bytes
-const ed25519SecretKey = kp.secretKey; // 64 bytes (seed + public key)
-// Step 2: Extract the seed from the Ed25519 secret key
-// In tweetnacl-js, the first 32 bytes of the secretKey is the seed
-const seed = ed25519SecretKey.slice(0, 32);
-
-// Step 3: Generate an X25519 key pair from the same seed
-// tweetnacl-js allows generating X25519 keys from a seed using nacl.box.keyPair.fromSecretKey
-// However, we need to ensure the seed is compatible
-const x25519KeyPair = nacl.box.keyPair.fromSecretKey(seed);
-return {
-  publicKey: binToHex(x25519KeyPair.publicKey),
-  privateKey: binToHex(x25519KeyPair.secretKey),
+  const kp = nacl.sign.keyPair.fromSeed(hexToBin(privateKey));
+  const ed25519PublicKey = kp.publicKey; // 32 bytes
+  const ed25519SecretKey = kp.secretKey; // 64 bytes (seed + public key)
+  const seed = ed25519SecretKey.slice(0, 32);
+  const x25519KeyPair = nacl.box.keyPair.fromSecretKey(seed);
+  return {
+    publicKey: binToHex(x25519KeyPair.publicKey),
+    privateKey: binToHex(x25519KeyPair.secretKey),
+  }
 }
-  }
 
-  export const getStreamName = (senderKey: string, receiverKey: string)=>{
-    const sortedKeys = [senderKey, receiverKey].sort();
-    const concatenatedKeys = sortedKeys.join('');
-    return concatenatedKeys
+export const generateX25519FromMnemonic = (mnemonic: string, path: string = "m/44'/626'/0'") => {
+  if (!validateMnemonic(mnemonic)) {
+    throw new Error('Invalid BIP39 mnemonic');
   }
+  const words = mnemonic.trim().split(/\s+/);
+  if (words.length !== 12) {
+    throw new Error('Mnemonic must be 12 words');
+  }
+  const seed = mnemonicToSeedSync(mnemonic); // Buffer
+  const { key /* 32-byte seed */, chainCode } = derivePath(path, seed.toString('hex'));
+  const edSeed = Uint8Array.from(key);
+  const edKeyPair = nacl.sign.keyPair.fromSeed(edSeed);
+  const x25519 = nacl.box.keyPair.fromSecretKey(edSeed);
+
+  return {
+    path,
+    chainCode: binToHex(chainCode),
+    ed25519: {
+      seed: binToHex(edSeed),
+      publicKey: binToHex(edKeyPair.publicKey),
+      secretKey: binToHex(edKeyPair.secretKey) // 64 bytes (seed + pub)
+    },
+    x25519: {
+      publicKey: binToHex(x25519.publicKey),
+      secretKey: binToHex(x25519.secretKey)
+    }
+  };
+}
+
+export const getStreamName = (senderKey: string, receiverKey: string)=>{
+  const sortedKeys = [senderKey, receiverKey].sort();
+  const concatenatedKeys = sortedKeys.join('');
+  return concatenatedKeys
+}
