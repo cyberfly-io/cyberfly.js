@@ -1,6 +1,14 @@
 import { gql } from 'graphql-request'
 
 export const QUERIES = {
+  DB_INFO: gql`
+    query DbInfo($dbaddr: String!) {
+      dbInfo(dbaddr: $dbaddr) {
+        dbaddr
+        name
+      }
+    }
+  `,
   GET_SYSTEM_INFO: gql`
     query GetSystemInfo {
       sysInfo {
@@ -182,6 +190,27 @@ export const QUERIES = {
       readChatHistory(streamName: $streamName, from: $from, to: $to) {
         message
         id
+      }
+    }
+  `,
+
+  GET_IP_LOCATION: gql`
+    query GetIPLocation($ip: String!) {
+      getIPLocation(ip: $ip) {
+        status
+        country
+        countryCode
+        region
+        regionName
+        city
+        zip
+        lat
+        lon
+        timezone
+        isp
+        org
+        as
+        query
       }
     }
   `

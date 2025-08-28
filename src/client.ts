@@ -101,6 +101,11 @@ export class CyberflySDK {
     return data.nodeInfo
   }
 
+  async getDBInfo(dbaddr: string) {
+  const data = await this.client.request(QUERIES.DB_INFO, { dbaddr });
+  return data.dbInfo;
+}
+
   // Database Operations
   async createDatabase(dbinfo:any) {
     const signature = this.signing.signData(dbinfo)
@@ -262,5 +267,10 @@ export class CyberflySDK {
       to
     });
     return data.readChatHistory;
+  }
+
+  async getIPLocation(ip: string) {
+    const data = await this.client.request(QUERIES.GET_IP_LOCATION, { ip });
+    return data.getIPLocation;
   }
 }
